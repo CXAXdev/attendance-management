@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>勤怠アプリ はじめてガイド</title>
+<meta name="description" content="建築業向け勤怠アプリの試作版を、スマホとPCで15分で一周するための画面付きガイド。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap">
+<style>
+  /* レイアウト: 1章=1枚のカード。左に実機スクリーンショット、右に大きな番号付きの手順。印刷時は章ごとに改ページ。 */
+  :root {
+    --bg: #eef4ff;
+    --card: #ffffff;
+    --ink: #17233a;
+    --muted: #5b6b86;
+    --line: #d9e2f5;
+    --blue: #2f6bff;
+    --blue-soft: #e4ecff;
+    --green: #16a34a;
+    --green-soft: #dcf7e5;
+    --red: #e11d2b;
+    --red-soft: #ffe1e4;
+    --orange: #f97316;
+    --orange-soft: #ffe9d6;
+    --yellow: #ffe766;
+    --gray-btn: #e5e7eb;
+    --display: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", "Noto Sans JP", sans-serif;
+    --body: "Noto Sans JP", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 17px;
+    line-height: 1.7;
+    padding-block: 0 48px;
+    padding-inline: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; }
+  h1, h2, h3 { font-family: var(--display); font-weight: 800; line-height: 1.25; text-wrap: balance; margin: 0; }
+
+  /* ---- ヒーロー ---- */
+  .hero { padding-block: 40px 28px; display: grid; gap: 18px; }
+  .hero .eyebrow { display: inline-block; background: var(--ink); color: #fff; font-family: var(--display); font-weight: 700; font-size: 14px; letter-spacing: .12em; padding: 6px 14px; border-radius: 999px; width: fit-content; }
+  .hero h1 { font-size: clamp(36px, 6vw, 60px); }
+  .hero h1 .mark { background: linear-gradient(transparent 55%, var(--yellow) 55%); padding: 0 .1em; }
+  .hero p { font-size: 20px; margin: 0; color: var(--muted); font-weight: 500; }
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+  .chip { background: var(--card); border: 2px solid var(--line); border-radius: 999px; padding: 6px 16px; font-weight: 700; font-size: 15px; display: inline-flex; align-items: center; gap: 8px; }
+  .chip .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--blue); }
+
+  /* ---- 15分コース ---- */
+  .course { background: var(--card); border-radius: 28px; padding: 26px 24px; border: 3px solid var(--ink); box-shadow: 8px 8px 0 var(--ink); margin-bottom: 36px; }
+  .course h2 { font-size: 26px; margin-bottom: 6px; }
+  .course .lead { color: var(--muted); margin: 0 0 18px; font-size: 16px; }
+  .route { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; counter-reset: route; }
+  .route a { text-decoration: none; color: inherit; display: block; border-radius: 18px; padding: 14px 12px 12px; border: 2px solid var(--line); background: #f8faff; min-width: 0; }
+  .route a:hover, .route a:focus-visible { border-color: var(--blue); outline: none; }
+  .route b { display: block; font-family: var(--display); font-size: 17px; line-height: 1.3; }
+  .route b::before { counter-increment: route; content: counter(route); display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 15px; margin-right: 8px; vertical-align: -6px; }
+  .route span { display: block; color: var(--muted); font-size: 13px; margin-top: 4px; }
+  .route .who { display: inline-block; margin-top: 8px; font-size: 12px; font-weight: 700; padding: 2px 10px; border-radius: 999px; }
+  .who.emp { background: var(--green-soft); color: #166534; }
+  .who.boss { background: var(--blue-soft); color: #1e40af; }
+
+  /* ---- 章 ---- */
+  .chapter { background: var(--card); border-radius: 28px; padding: 28px 24px 26px; margin-bottom: 28px; border: 2px solid var(--line); position: relative; }
+  .chapter-head { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 18px; }
+  .num { font-family: var(--display); font-weight: 800; font-size: 20px; color: #fff; width: 48px; height: 48px; border-radius: 16px; display: grid; place-items: center; flex-shrink: 0; }
+  .chapter h2 { font-size: clamp(24px, 3.4vw, 32px); }
+  .chapter .sub { width: 100%; color: var(--muted); margin: 0; font-size: 16px; }
+  .c-green .num { background: var(--green); } .c-green .step i { background: var(--green); }
+  .c-blue .num { background: var(--blue); }   .c-blue .step i { background: var(--blue); }
+  .c-red .num { background: var(--red); }     .c-red .step i { background: var(--red); }
+  .c-orange .num { background: var(--orange); } .c-orange .step i { background: var(--orange); }
+  .c-ink .num { background: var(--ink); }     .c-ink .step i { background: var(--ink); }
+
+  .body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 26px; align-items: start; }
+  .body.wide { grid-template-columns: 1fr; }
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; min-width: 0; }
+  .step { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 12px; align-items: start; }
+  .step i { font-style: normal; font-family: var(--display); font-weight: 800; color: #fff; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-size: 18px; }
+  .step b { display: block; font-family: var(--display); font-size: 19px; line-height: 1.35; }
+  .step p { margin: 2px 0 0; color: var(--muted); font-size: 15px; }
+  .tip { margin-top: 16px; background: #fff9d6; border: 2px dashed #e9c800; border-radius: 16px; padding: 12px 16px; font-size: 15px; }
+  .tip b { font-family: var(--display); }
+
+  /* 画面上の言葉は、アプリと同じ色のボタン風にして指す */
+  .k { display: inline-block; font-weight: 700; padding: 1px 10px; border-radius: 10px; white-space: nowrap; line-height: 1.5; font-size: .95em; }
+  .k.green { background: var(--green); color: #fff; }
+  .k.red { background: var(--red); color: #fff; }
+  .k.orange { background: var(--orange); color: #fff; }
+  .k.blue { background: var(--blue); color: #fff; }
+  .k.gray { background: var(--gray-btn); color: #1f2937; }
+  .k.soft-green { background: var(--green-soft); color: #166534; }
+  .k.soft-red { background: var(--red-soft); color: #991b1b; }
+  .k.soft-orange { background: var(--orange-soft); color: #9a3412; }
+  .k.soft-blue { background: var(--blue-soft); color: #1e40af; }
+  .k.outline { border: 2px solid var(--line); background: #fff; }
+
+  /* ---- スクリーンショット ---- */
+  .shots { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; min-width: 0; }
+  .phone { width: 220px; max-width: 100%; border-radius: 30px; border: 8px solid #1f2633; background: #1f2633; overflow: hidden; box-shadow: 0 12px 28px rgba(23, 35, 58, .18); }
+  .phone img { display: block; width: 100%; aspect-ratio: 390 / 844; object-fit: cover; object-position: top; border-radius: 22px; }
+  .shot-wrap { display: grid; gap: 8px; justify-items: center; }
+  .cap { font-size: 13px; font-weight: 700; color: var(--muted); text-align: center; }
+  .screen { width: 100%; border-radius: 16px; overflow: hidden; border: 2px solid var(--line); box-shadow: 0 12px 28px rgba(23, 35, 58, .12); background: #fff; }
+  .screen .bar { height: 26px; background: #e9eef8; display: flex; align-items: center; gap: 6px; padding-left: 12px; }
+  .screen .bar s { width: 10px; height: 10px; border-radius: 50%; display: block; text-decoration: none; }
+  .screen .bar s:nth-child(1) { background: #ff5f57; } .screen .bar s:nth-child(2) { background: #febc2e; } .screen .bar s:nth-child(3) { background: #28c840; }
+  .screen img { display: block; width: 100%; height: auto; }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 10px; font-size: 14px; font-weight: 700; }
+
+  /* ---- アカウント ---- */
+  .people { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-top: 14px; }
+  .person { border: 2px solid var(--line); border-radius: 16px; padding: 10px 12px; background: #f8faff; }
+  .person b { font-family: var(--display); font-size: 17px; display: block; }
+  .person small { color: var(--muted); display: block; font-size: 13px; line-height: 1.5; }
+  .person .who { display: inline-block; margin-top: 6px; font-size: 12px; font-weight: 700; padding: 1px 10px; border-radius: 999px; }
+
+  /* ---- 注意 ---- */
+  .notes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  .note { border-radius: 22px; padding: 18px; border: 2px solid var(--line); background: var(--card); }
+  .note .ico { font-family: var(--display); font-weight: 800; font-size: 26px; display: block; margin-bottom: 4px; }
+  .note b { font-family: var(--display); font-size: 18px; display: block; }
+  .note p { margin: 4px 0 0; color: var(--muted); font-size: 15px; }
+  footer { text-align: center; color: var(--muted); font-size: 13px; margin-top: 36px; }
+
+  @media (max-width: 760px) {
+    .body { grid-template-columns: 1fr; }
+    .route { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .route b { font-size: 16px; }
+    .route b::before { width: 24px; height: 24px; font-size: 13px; margin-right: 6px; vertical-align: -4px; }
+    .notes { grid-template-columns: 1fr; }
+    .shots .shot-wrap { width: 46%; }
+    .shots .shot-wrap:has(.screen) { width: 100%; }
+    .phone { width: 100%; }
+    .course { box-shadow: 5px 5px 0 var(--ink); }
+    .course h2 { font-size: 23px; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .route a { transition: transform .15s ease, border-color .15s ease; }
+    .route a:hover { transform: translateY(-2px); }
+  }
+  @media print {
+    @page { size: A4; margin: 12mm; }
+    body { background: #fff; padding-inline: 0; font-size: 13px; }
+    .hero { padding-block: 10px 12px; }
+    .hero h1 { font-size: 34px; } .hero p { font-size: 15px; }
+    .course { box-shadow: none; break-after: page; }
+    .route { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+    .route b { font-size: 15px; }
+    .chapter { break-inside: avoid; break-before: auto; margin-bottom: 14px; padding: 16px; border-radius: 16px; box-shadow: none; }
+    .phone { width: 150px; box-shadow: none; }
+    .screen { box-shadow: none; }
+    .step b { font-size: 15px; } .step p { font-size: 12px; }
+    .route a:hover { transform: none; }
+    .notes { break-inside: avoid; }
+  }
+</style>
+</head><body>
+
+<div class="wrap">
+
+  <header class="hero">
+    <span class="eyebrow">DEMO GUIDE</span>
+    <h1>勤怠アプリ<br><span class="mark">はじめてガイド</span></h1>
+    <p>スマホで出勤、パソコンで確認。15分でひと回りできます。</p>
+    <div class="chips">
+      <span class="chip"><span class="dot"></span>パスワードなし。名前を押すだけ</span>
+      <span class="chip"><span class="dot" style="background:var(--green)"></span>インストール不要。URLを開くだけ</span>
+      <span class="chip"><span class="dot" style="background:var(--orange)"></span>データはあなたのブラウザの中だけ</span>
+    </div>
+  </header>
+
+  <section class="course" id="course">
+    <h2>まずはこの順番で（約15分）</h2>
+    <p class="lead">従業員で朝の出勤をしてから社長に切り替えると、打刻がそのまま管理画面に映るところまで見られます。</p>
+    <nav class="route">
+      <a href="#c1"><b>ログイン</b><span>名前を押すだけ</span><em class="who emp">山田 一郎</em></a>
+      <a href="#c2"><b>出勤する</b><span>アルコールチェック込み</span><em class="who emp">山田 一郎</em></a>
+      <a href="#c3"><b>休憩・退勤</b><span>引き継ぎを一言</span><em class="who emp">山田 一郎</em></a>
+      <a href="#c5"><b>社長に切替</b><span>ログアウト → 社長 太郎</span><em class="who boss">社長 太郎</em></a>
+      <a href="#c5"><b>予定ボード</b><span>誰がどこにいるか</span><em class="who boss">社長 太郎</em></a>
+      <a href="#c9"><b>調査用の帳票</b><span>出勤簿・年休・労務チェック</span><em class="who boss">社長 太郎</em></a>
+    </nav>
+  </section>
+
+  <!-- 1 ログイン -->
+  <section class="chapter c-blue" id="c1">
+    <div class="chapter-head">
+      <span class="num">1</span>
+      <h2>ログインは名前を押すだけ</h2>
+      <p class="sub">初めて開いた画面では、操作の案内が自動で出ます。「次へ」で読み進めるか「スキップ」で閉じてください。</p>
+    </div>
+    <div class="body">
+      <div class="shots">
+        <div class="shot-wrap"><div class="phone"><img src="img/login-guide.png" alt="ログイン画面。最初に案内のポップアップが出ている"></div><span class="cap">最初に案内が出ます</span></div>
+        <div class="shot-wrap"><div class="phone"><img src="img/login.png" alt="ログイン画面。名前の一覧"></div><span class="cap">名前を押してログイン</span></div>
+      </div>
+      <div>
+        <ol class="steps">
+          <li class="step"><i>1</i><div><b>URL を開く</b><p>スマホでもパソコンでも同じ画面です。案内が出たら <span class="k blue">次へ →</span> で読み進めます。</p></div></li>
+          <li class="step"><i>2</i><div><b><span class="k outline">山田 一郎</span> を押す</b><p>緑の「出退勤」が従業員、青の「管理者」が社長です。従業員は19名いるので、上の検索欄で名前を絞れます。</p></div></li>
+          <li class="step"><i>3</i><div><b>別の人に替えるときは <span class="k gray">ログアウト</span></b><p>右上のボタンでログイン画面に戻ります。</p></div></li>
+        </ol>
+        <div class="people">
+          <div class="person"><b>山田 一郎</b><small>大工・鳶／今日の現場あり</small><span class="who emp">最初はこの人</span></div>
+          <div class="person"><b>社長 太郎</b><small>管理者／すべての画面</small><span class="who boss">管理者</span></div>
+          <div class="person"><b>佐藤 三郎</b><small>現場監督・大工</small><span class="who emp">従業員</span></div>
+          <div class="person"><b>鈴木 次郎</b><small>鳶／今日は未出勤の例</small><span class="who emp">従業員</span></div>
+          <div class="person"><b>田中 四郎</b><small>作業員／今日は予定なし</small><span class="who emp">従業員</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 出勤 -->
+  <section class="chapter c-green" id="c2">
+    <div class="chapter-head">
+      <span class="num">2</span>
+      <h2>出勤する（アルコールチェック込み）</h2>
+      <p class="sub">現場に着いたら、緑の大きなボタンを押すだけ。検知器の結果を選ぶと、そのまま出勤打刻になります。</p>
+    </div>
+    <div class="body">
+      <div class="shots">
+        <div class="shot-wrap"><div class="phone"><img src="img/emp-home.png" alt="従業員ホーム。引き継ぎと社長からのお知らせ"></div><span class="cap">ホーム上部: 引き継ぎとお知らせ</span></div>
+        <div class="shot-wrap"><div class="phone"><img src="img/emp-home-clockin.png" alt="今日の現場と緑の出勤ボタン"></div><span class="cap">今日の現場と「出勤」</span></div>
+        <div class="shot-wrap"><div class="phone"><img src="img/emp-alcohol.png" alt="アルコールチェックのポップアップ"></div><span class="cap">アルコールチェック</span></div>
+        <div class="shot-wrap"><div class="phone"><img src="img/emp-alcohol-ok.png" alt="異常なしを選んだあと、出勤するボタン"></div><span class="cap">「異常なし」→「出勤する」</span></div>
+      </div>
+      <div>
+        <ol class="steps">
+          <li class="step"><i>1</i><div><b>引き継ぎを読んで <span class="k blue">既読にする</span></b><p>前日の作業者からのメモです。既読にすると24時間後に自動で消えます。</p></div></li>
+          <li class="step"><i>2</i><div><b>赤枠は <span class="k soft-red">社長からのお知らせ</span></b><p>重要なお知らせは出勤後もずっと表示されます。</p></div></li>
+          <li class="step"><i>3</i><div><b>「今日の現場」を確認して <span class="k green">出勤</span></b><p>現場が複数あるときはここで選びます。</p></div></li>
+          <li class="step"><i>4</i><div><b><span class="k soft-green">異常なし</span> → <span class="k green">出勤する</span></b><p>検知器で確認した前提です。これで出勤時刻が記録されます。</p></div></li>
+          <li class="step"><i>5</i><div><b><span class="k soft-red">検出あり</span> を選ぶと出勤できません</b><p>記録だけが残り、社長の記録簿に赤で載ります。</p></div></li>
+        </ol>
+        <div class="tip"><b>見せどころ:</b> 打刻のあと「5分 早出」「3分 遅刻」のように、予定開始との差が自動で出ます。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 休憩・退勤 -->
+  <section class="chapter c-red" id="c3">
+    <div class="chapter-head">
+      <span class="num">3</span>
+      <h2>休憩と退勤</h2>
+      <p class="sub">出勤すると、ボタンが「休憩開始」と「退勤」に変わります。休憩は何回でも記録できます。</p>
+    </div>
+    <div class="body">
+      <div class="shots">
+        <div class="shot-wrap"><div class="phone"><img src="img/emp-working.png" alt="出勤後の画面。打刻状況と休憩開始・退勤ボタン"></div><span class="cap">出勤後の画面</span></div>
+        <div class="shot-wrap"><div class="phone"><img src="img/emp-clockout.png" alt="退勤の前に。実労働の見込みと引き継ぎ入力"></div><span class="cap">退勤の前に</span></div>
+        <div class="shot-wrap"><div class="phone"><img src="img/emp-done.png" alt="本日の勤務は終了しました"></div><span class="cap">退勤後</span></div>
+      </div>
+      <div>
+        <ol class="steps">
+          <li class="step"><i>1</i><div><b><span class="k orange">休憩開始</span> → <span class="k orange">休憩終了</span></b><p>休憩中は退勤できません。回数と合計時間が自動で集計されます。</p></div></li>
+          <li class="step"><i>2</i><div><b><span class="k red">退勤</span> を押す</b><p>今日の実労働時間（見込み）と残業が表示されます。</p></div></li>
+          <li class="step"><i>3</i><div><b>引き継ぎを一言書く（空欄でもOK）</b><p>翌日の作業者のホームと、社長の画面に届きます。</p></div></li>
+          <li class="step"><i>4</i><div><b><span class="k red">退勤する</span> → <span class="k red">はい、退勤</span></b><p>2段階なので押し間違いが起きません。ホームに戻ると「本日の勤務は終了しました」。</p></div></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 シフト確認 -->
+  <section class="chapter c-ink" id="c4">
+    <div class="chapter-head">
+      <span class="num">4</span>
+      <h2>自分のシフトをカレンダーで見る</h2>
+      <p class="sub">ホームの「シフト確認」から。◯が出勤日、×がシフトなし。日付を押すと現場と時間が出ます。</p>
+    </div>
+    <div class="body">
+      <div class="shots">
+        <div class="shot-wrap"><div class="phone"><img src="img/emp-shift.png" alt="シフト確認のカレンダー"></div><span class="cap">シフト確認</span></div>
+      </div>
+      <div>
+        <ol class="steps">
+          <li class="step"><i>1</i><div><b>ホーム下部の <span class="k gray">シフト確認</span></b><p>ホームには直近3回分の予定も出ています。</p></div></li>
+          <li class="step"><i>2</i><div><b>日付を押すと詳細</b><p>現場名と時間帯が下に表示されます。前の月・次の月も見られます。</p></div></li>
+        </ol>
+        <div class="tip"><b>補足:</b> 「シフト希望」（休みたい日を出す画面）は社長が設定でオンにしたときだけメニューに出ます。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 社長の画面 -->
+  <section class="chapter c-blue" id="c5">
+    <div class="chapter-head">
+      <span class="num">5</span>
+      <h2>社長に切り替えて、予定ボードを見る</h2>
+      <p class="sub">右上の「ログアウト」→「社長 太郎」。さっきの出勤が、そのままボードに映っています。パソコンの横幅で見ると全体が一度に入ります。</p>
+    </div>
+    <div class="body wide">
+      <div class="screen"><div class="bar"><s></s><s></s><s></s></div><img src="img/admin-home.png" alt="管理者ホーム。5日分の出勤予定ボード"></div>
+      <div class="legend">
+        <span><span class="k soft-green">● 出勤中</span></span>
+        <span><span class="k soft-orange">▲ 遅刻</span></span>
+        <span><span class="k soft-red">⚠ 未出勤</span></span>
+        <span><span class="k gray">済 退勤済み</span></span>
+      </div>
+      <div class="body" style="margin-top:18px">
+        <ol class="steps">
+          <li class="step"><i>1</i><div><b>左端が今日。山田さんが <span class="k soft-green">● 出勤中</span></b><p>予定開始から10分過ぎても打刻がない人は <span class="k soft-red">⚠ 未出勤</span> になります。</p></div></li>
+          <li class="step"><i>2</i><div><b><span class="k soft-red">未出勤 2</span> のバッジを押すと詳細</b><p>誰が・どの現場で・何分遅れているかが出ます。</p></div></li>
+          <li class="step"><i>3</i><div><b>名前を押して現場を移動</b><p>明日の列で試すと分かりやすいです。「この日の予定から外す」もここから。</p></div></li>
+          <li class="step"><i>4</i><div><b><span class="k blue">＋</span> で人を追加、<span class="k gray">✕</span> で現場を外す、<span class="k outline">＋ 現場</span> で現場を追加</b><p>名前だけで新しい現場も作れます。住所などは後から「現場マスター」で。</p></div></li>
+        </ol>
+        <div class="shots">
+          <div class="shot-wrap"><div class="screen"><div class="bar"><s></s><s></s><s></s></div><img src="img/admin-alert.png" alt="出勤アラートの詳細ポップアップ"></div><span class="cap">アラートの詳細</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 今どこにいる -->
+  <section class="chapter c-green" id="c6">
+    <div class="chapter-head">
+      <span class="num">6</span>
+      <h2>今どこにいる</h2>
+      <p class="sub">メニューの「今どこにいる」。この瞬間に出勤中の人を現場ごとに表示します。</p>
+    </div>
+    <div class="body">
+      <div class="screen"><div class="bar"><s></s><s></s><s></s></div><img src="img/admin-working.png" alt="今どこにいる。現場ごとの出勤中の人"></div>
+      <ol class="steps">
+        <li class="step"><i>1</i><div><b>現場ごとに出勤中の人が並ぶ</b><p>出勤時刻、休憩中かどうかが一目で分かります。</p></div></li>
+        <li class="step"><i>2</i><div><b><span class="k soft-green">酒気なし</span> がアルコールチェック済みの印</b><p>未実施なら灰色の「未実施」が出ます。</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 7 アルコール記録簿 -->
+  <section class="chapter c-red" id="c7">
+    <div class="chapter-head">
+      <span class="num">7</span>
+      <h2>アルコールチェック記録簿と Excel 出力</h2>
+      <p class="sub">メニューの「アルコール記録簿」。法令で1年間保存が求められる項目を月ごとに一覧し、そのまま Excel にできます。</p>
+    </div>
+    <div class="body wide">
+      <div class="screen"><div class="bar"><s></s><s></s><s></s></div><img src="img/admin-alcohol.png" alt="アルコールチェック記録簿の月別一覧"></div>
+      <ol class="steps" style="margin-top:18px">
+        <li class="step"><i>1</i><div><b>月を切り替えて件数を確認</b><p>記録／検出あり／未実施の件数が上に出ます。サンプルには <span class="k soft-red">検出あり</span> と <span class="k soft-orange">未実施</span> が数件入っています。</p></div></li>
+        <li class="step"><i>2</i><div><b>「検出あり・未実施のみ」にチェック</b><p>問題のある行だけに絞れます。赤い行が検出あり、未実施は出勤したのに記録がない日です。</p></div></li>
+        <li class="step"><i>3</i><div><b><span class="k gray">修正</span> で確認者を変更</b><p>対面で確認した社長や監督に付け替えられます。まとめて変更も可能です。</p></div></li>
+        <li class="step"><i>4</i><div><b><span class="k green">Excel出力</span></b><p>表示中の月の記録簿がダウンロードされます。スマホでは「ファイル」アプリに保存されます。</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 8 日次出勤表・通達 -->
+  <section class="chapter c-orange" id="c8">
+    <div class="chapter-head">
+      <span class="num">8</span>
+      <h2>日次出勤表と、社長からのお知らせ</h2>
+      <p class="sub">紙の出勤表と同じ様式でプレビューして Excel に。お知らせは「重要」にすると従業員の画面に赤枠で出ます。</p>
+    </div>
+    <div class="body">
+      <div class="shot-wrap"><div class="screen"><div class="bar"><s></s><s></s><s></s></div><img src="img/admin-sheet.png" alt="日次出勤表のプレビュー"></div><span class="cap">日次出勤表</span></div>
+      <div class="shot-wrap"><div class="screen"><div class="bar"><s></s><s></s><s></s></div><img src="img/admin-notices.png" alt="通達配信の画面"></div><span class="cap">通達配信</span></div>
+    </div>
+    <ol class="steps" style="margin-top:18px">
+      <li class="step"><i>1</i><div><b>日次出勤表: 日付を選んで <span class="k green">Excel出力</span></b><p>現場ごとに出勤者が並びます。空欄は手書き用です。</p></div></li>
+      <li class="step"><i>2</i><div><b>通達配信: タイトルと本文を入れて <span class="k blue">配信する</span></b><p>「重要」にチェックすると従業員のホームに赤枠で常に表示。あとで従業員に戻って確認すると効果的です。</p></div></li>
+    </ol>
+  </section>
+
+  <!-- 9 労務調査 -->
+  <section class="chapter c-ink" id="c9">
+    <div class="chapter-head">
+      <span class="num">9</span>
+      <h2>労務調査に備える帳票</h2>
+      <p class="sub">労基署の調査で求められる「出勤簿」「労働者名簿」「年次有給休暇管理簿」をそのまま Excel にできます。打刻の修正は理由つきで記録に残ります。</p>
+    </div>
+    <div class="body wide">
+      <div class="screen"><div class="bar"><s></s><s></s><s></s></div><img src="img/admin-ledger.png" alt="出勤簿。従業員別の日ごとの出退勤と退勤忘れの一覧"></div>
+      <ol class="steps" style="margin-top:18px">
+        <li class="step"><i>1</i><div><b>メニューの <span class="k outline">出勤簿・打刻修正</span></b><p>従業員ごとに日別の始業・終業・休憩・法定外残業・深夜・休日労働が並びます。<span class="k green">全員分を Excel</span> で1冊に。</p></div></li>
+        <li class="step"><i>2</i><div><b>退勤忘れは上に警告</b><p>押すと修正画面が開きます。理由が必須で、修正前の値と理由が履歴に残ります。</p></div></li>
+        <li class="step"><i>3</i><div><b><span class="k outline">年休管理簿</span> と <span class="k outline">労務チェック</span></b><p>年5日取得義務の達成状況、36協定（月45h・年360h・月100h・複数月平均80h）、週1日の休日、連続勤務をまとめて確認できます。</p></div></li>
+        <li class="step"><i>4</i><div><b><span class="k outline">監査ログ</span> の「整合性チェック」</b><p>誰が・いつ・なぜ変えたかが連番とハッシュで記録され、途中の書き換えを検知できます。</p></div></li>
+      </ol>
+      <div class="body" style="margin-top:18px">
+        <div class="shot-wrap"><div class="screen"><div class="bar"><s></s><s></s><s></s></div><img src="img/admin-paidleave.png" alt="年次有給休暇管理簿"></div><span class="cap">年休管理簿</span></div>
+        <div class="shot-wrap"><div class="screen"><div class="bar"><s></s><s></s><s></s></div><img src="img/admin-compliance.png" alt="労務チェック"></div><span class="cap">労務チェック</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 シフト作成 -->
+  <section class="chapter c-ink" id="c10">
+    <div class="chapter-head">
+      <span class="num">10</span>
+      <h2>シフトを組む</h2>
+      <p class="sub">メニューの「シフト管理」。作業員を選んで日を押すだけ。「更新する」を押すまでは下書きで、従業員には見えません。</p>
+    </div>
+    <div class="body wide">
+      <div class="screen"><div class="bar"><s></s><s></s><s></s></div><img src="img/admin-shifts.png" alt="シフト作成画面。作業員を選んだ状態"></div>
+      <ol class="steps" style="margin-top:18px">
+        <li class="step"><i>1</i><div><b>左で作業員を選ぶ</b><p>現場と時間帯の入力欄が出ます。</p></div></li>
+        <li class="step"><i>2</i><div><b>カレンダーの日を押す</b><p>その日に配置されます。もう一度押すと解除。◯が配置済み、⚠は時間の重複です。</p></div></li>
+        <li class="step"><i>3</i><div><b>右で休み希望と出勤予定を確認</b><p>従業員が出した × ▲ △ の希望がそのまま見えます。</p></div></li>
+        <li class="step"><i>4</i><div><b><span class="k green">更新する</span> で反映</b><p>「下書き保存」で3件まで途中保存、「変更を破棄」で元に戻せます。</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 11 困ったら -->
+  <section class="chapter c-blue" id="c11">
+    <div class="chapter-head">
+      <span class="num">?</span>
+      <h2>困ったときは</h2>
+      <p class="sub">案内をもう一度見たい、最初からやり直したい、はすべてアプリの中で解決できます。</p>
+    </div>
+    <div class="body">
+      <div class="shots">
+        <div class="shot-wrap"><div class="phone"><img src="img/emp-guide.png" alt="操作案内のポップアップ。説明対象だけが明るく表示されている"></div><span class="cap">「？」で案内を再表示</span></div>
+        <div class="shot-wrap"><div class="screen" style="max-width:420px"><div class="bar"><s></s><s></s><s></s></div><img src="img/admin-settings.png" alt="設定画面。案内の再表示とサンプルデータの初期化"></div><span class="cap">社長の「設定」</span></div>
+      </div>
+      <ol class="steps">
+        <li class="step"><i>1</i><div><b>右上の <span class="k soft-blue">？</span> でその画面の案内</b><p>説明している場所だけが明るく残るので、どこを押すかすぐ分かります。</p></div></li>
+        <li class="step"><i>2</i><div><b>社長の「設定」→ <span class="k blue">案内をもう一度表示する</span></b><p>別の人に見せる前に押すと、すべての画面で案内が最初から出ます。</p></div></li>
+        <li class="step"><i>3</i><div><b>「設定」→ <span class="k soft-red">サンプルデータを初期状態に戻す</span></b><p>打刻やシフトの変更をすべて消して、今日基準のサンプルを作り直します。デモの朝に押すのがおすすめ。</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="notes">
+    <div class="note"><span class="ico">📱</span><b>データはブラウザの中だけ</b><p>サーバーには送られません。別の端末・別のブラウザで開くと、それぞれ別のデータになります。社長の「設定」から JSON で書き出し・復元できます。</p></div>
+    <div class="note"><span class="ico">🔓</span><b>試作版なのでパスワードなし</b><p>URL を知っている人は誰でも開けます。実際の社員名や現場名は入れないでください。</p></div>
+    <div class="note"><span class="ico">📅</span><b>サンプルは「開いた日」基準</b><p>今日・明日の予定と過去12日分の実績が自動で入ります。日をまたいだら「初期状態に戻す」を。</p></div>
+  </section>
+
+  <footer>勤怠・労務管理アプリ 試作版 ・ はじめてガイド</footer>
+</div>
+
+</body></html>
