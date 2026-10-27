@@ -46,6 +46,14 @@ export interface BoardAlert {
   detail: string;
 }
 
+/** その日に出勤予定の無い従業員(「休み」)。理由が分かれば添える */
+export interface BoardOffPerson {
+  employeeId: string;
+  name: string;
+  /** 年休 / 休み希望(×▲△) など。無ければ undefined */
+  reason?: string;
+}
+
 export interface BoardDay {
   date: string; // YYYY-MM-DD
   isToday: boolean;
@@ -55,6 +63,8 @@ export interface BoardDay {
   alerts: BoardAlert[];
   /** その日の予定人数 */
   total: number;
+  /** その日に出勤予定の無い在籍従業員(休み) */
+  offDuty: BoardOffPerson[];
 }
 
 /** fromYmd から count 日分の日付(YYYY-MM-DD)を返す */
@@ -171,6 +181,32 @@ export function buildScheduleBoard(
       sites,
       alerts,
       total: sites.reduce((s, x) => s + x.people.length, 0),
+      offDuty: offDutyEmployees(db, date),
+    };
+  });
+}
+
+/**
+ * その日に出勤予定の無い在籍従業員(休み)。理由は 年休 → 休み希望 の順で判定する。
+ * 退職者と管理者は含めない。
+ */
+export function offDutyEmployees(db: Database, date: string): BoardOffPerson[] {
+  const leaveMark: Record<string, string> = {
+    off: "希望休",
+    off_negotiable: "できれば休み",
+    partial: "短時間希望",
+  };
+  return unassignedEmployees(db, date).map((e) => {
+    const paid = db.paidLeaves.some(
+      (p) => p.employeeId === e.id && p.kind === "use" && p.date === date
+    );
+    const wish = db.leaveRequests.find(
+      (l) => l.employeeId === e.id && l.date === date
+    );
+    return {
+      employeeId: e.id,
+      name: e.name,
+      reason: paid ? "年休" : wish ? leaveMark[wish.type] : undefined,
     };
   });
 }

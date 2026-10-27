@@ -210,7 +210,7 @@ export default function AdminDashboard() {
         <span>
           <span className="font-bold text-gray-500">済</span> 退勤済み
         </span>
-        <span>名前をタップすると現場を変更できます</span>
+        <span>名前をタップすると現場を変更できます。カード下の「休み」を押すとその日の休みの人が見られます</span>
       </div>
 
       {/* 操作の手順(既定は折りたたみ。見出しをクリックで開く) */}
@@ -562,6 +562,43 @@ function DayCard({
       >
         ＋ 現場
       </button>
+
+      {/* 休みの人(折りたたみ。押すと名前と理由が出る) */}
+      <details className="mt-2 rounded-lg bg-gray-50">
+        <summary className="flex cursor-pointer list-none items-center justify-between px-2 py-1.5 text-xs font-bold text-gray-600 [&::-webkit-details-marker]:hidden">
+          <span>
+            休み <span className="text-gray-900">{day.offDuty.length}人</span>
+          </span>
+          <span className="text-gray-400" aria-hidden>
+            ▾
+          </span>
+        </summary>
+        {day.offDuty.length === 0 ? (
+          <div className="px-2 pb-2 text-xs text-gray-400">全員出勤予定です</div>
+        ) : (
+          <ul className="space-y-1 px-2 pb-2">
+            {day.offDuty.map((p) => (
+              <li
+                key={p.employeeId}
+                className="flex items-center justify-between gap-1 rounded-md bg-white px-1.5 py-1 text-xs text-gray-700"
+              >
+                <span className="min-w-0 truncate">{p.name}</span>
+                {p.reason && (
+                  <span
+                    className={`shrink-0 rounded px-1 text-[10px] font-bold ${
+                      p.reason === "年休"
+                        ? "bg-blue-100 text-blue-800"
+                        : "bg-orange-100 text-orange-800"
+                    }`}
+                  >
+                    {p.reason}
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+      </details>
     </div>
   );
 }
