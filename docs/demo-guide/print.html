@@ -84,6 +84,8 @@
   .step i { font-style: normal; font-family: var(--display); font-weight: 800; color: #fff; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-size: 18px; }
   .step b { display: block; font-family: var(--display); font-size: 19px; line-height: 1.35; }
   .step p { margin: 2px 0 0; color: var(--muted); font-size: 15px; }
+  .url { margin-top: 6px !important; font-family: ui-monospace, Menlo, monospace; font-size: 14px; word-break: break-all; }
+  .url a { color: var(--blue); font-weight: 700; }
   .tip { margin-top: 16px; background: #fff9d6; border: 2px dashed #e9c800; border-radius: 16px; padding: 12px 16px; font-size: 15px; }
   .tip b { font-family: var(--display); }
 
@@ -173,6 +175,7 @@
       <span class="chip"><span class="dot" style="background:var(--green)"></span>インストール不要。URLを開くだけ</span>
       <span class="chip"><span class="dot" style="background:var(--orange)"></span>データはあなたのブラウザの中だけ</span>
     </div>
+    <p class="url" style="font-size:16px">アプリの URL: <a href="https://attendance-management-psi-ashy.vercel.app/login">https://attendance-management-psi-ashy.vercel.app</a></p>
   </header>
 
   <section class="course" id="course">
@@ -202,7 +205,7 @@
       </div>
       <div>
         <ol class="steps">
-          <li class="step"><i>1</i><div><b>URL を開く</b><p>スマホでもパソコンでも同じ画面です。案内が出たら <span class="k blue">次へ →</span> で読み進めます。</p></div></li>
+          <li class="step"><i>1</i><div><b>URL を開く</b><p>スマホでもパソコンでも同じ画面です。案内が出たら <span class="k blue">次へ →</span> で読み進めます。</p><p class="url"><a href="https://attendance-management-psi-ashy.vercel.app/login">https://attendance-management-psi-ashy.vercel.app</a></p></div></li>
           <li class="step"><i>2</i><div><b><span class="k outline">山田 一郎</span> を押す</b><p>緑の「出退勤」が従業員、青の「管理者」が社長です。従業員は19名いるので、上の検索欄で名前を絞れます。</p></div></li>
           <li class="step"><i>3</i><div><b>別の人に替えるときは <span class="k gray">ログアウト</span></b><p>右上のボタンでログイン画面に戻ります。</p></div></li>
         </ol>
