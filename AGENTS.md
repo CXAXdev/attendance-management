@@ -14,4 +14,4 @@ This version has breaking changes — APIs, conventions, and file structure may 
 - データ: `lib/db/store.ts`（キー `kintai-db-v10`。スキーマ変更時はキーを上げて `migrateDb` に既定値を足す）、`lib/db/seed.ts`（固定乱数のサンプル。ガイド登場人物 emp-admin/emp-001〜004 は固定）
 - 監査ログは `DataContext` の insert/update/remove が自動追記（update は変更フィールドのみ）。連番＋ハッシュ連鎖で改ざん検知
 - 画面内ガイド: `lib/guide/tours.ts`（pathname ごとの手順、`data-guide` 属性で対象指定）
-- 先方向けガイド: `docs/demo-guide/`（HTML + 画像、PDF は `docs/勤怠アプリ_はじめてガイド.pdf`）
+- 先方向けガイド: `public/guide/index.html`（アプリ内 `/guide` で表示、画像は `public/guide/img/`、PDF は `public/guide/kintai-guide.pdf`）。再生成は `scripts/shoot-guide.js`（撮影）→ `scripts/build-guide-pdf.js`（PDF）

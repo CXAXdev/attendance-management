@@ -70,7 +70,7 @@ export default function LoginPage() {
       <p className="mt-8 text-center text-xs text-gray-400">
         プロトタイプのため、パスワードなしで名前を選ぶだけでログインできます。
       </p>
-      <div className="mt-4 text-center">
+      <div className="mt-4 flex flex-wrap justify-center gap-2">
         <button
           type="button"
           onClick={() => start("/login")}
@@ -78,6 +78,12 @@ export default function LoginPage() {
         >
           ？ 使い方を見る
         </button>
+        <a
+          href="/guide/index.html"
+          className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-bold text-gray-700 active:bg-gray-100"
+        >
+          📖 はじめてガイド（PDF あり）
+        </a>
       </div>
     </div>
   );

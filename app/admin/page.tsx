@@ -268,6 +268,7 @@ export default function AdminDashboard() {
           <SmallNav href="/admin/reports" title="レポート" />
           <SmallNav href="/admin/audit" title="監査ログ" />
           <SmallNav href="/admin/settings" title="設定" />
+          <SmallNav href="/guide/index.html" title="📖 はじめてガイド" />
         </div>
       </section>
 

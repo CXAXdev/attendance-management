@@ -1,3 +1,5 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>勤怠アプリ はじめてガイド</title>
 <meta name="description" content="建築業向け勤怠アプリの試作版を、スマホとPCで15分で一周するための画面付きガイド。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -39,6 +41,12 @@
   .wrap { max-width: 1040px; margin: 0 auto; }
   h1, h2, h3 { font-family: var(--display); font-weight: 800; line-height: 1.25; text-wrap: balance; margin: 0; }
 
+  /* アプリ内で表示するときの上部バー */
+  .appbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; display: flex; justify-content: space-between; align-items: center; gap: 8px; margin: 0 -16px 8px; padding: 10px 16px; background: var(--card); border-bottom: 2px solid var(--line); }
+  .appbar a { text-decoration: none; font-family: var(--display); font-weight: 700; font-size: 15px; padding: 8px 14px; border-radius: 12px; }
+  .appbar .back { color: var(--ink); background: var(--gray-btn); }
+  .appbar .pdf { color: #fff; background: var(--blue); }
+  @media print { .appbar { display: none; } }
   /* ---- ヒーロー ---- */
   .hero { padding-block: 40px 28px; display: grid; gap: 18px; }
   .hero .eyebrow { display: inline-block; background: var(--ink); color: #fff; font-family: var(--display); font-weight: 700; font-size: 14px; letter-spacing: .12em; padding: 6px 14px; border-radius: 999px; width: fit-content; }
@@ -160,8 +168,11 @@
     .notes { break-inside: avoid; }
   }
 </style>
+</head><body>
 
 <div class="wrap">
+
+  <nav class="appbar"><a class="back" href="/login">← アプリに戻る</a><a class="pdf" href="kintai-guide.pdf" download="勤怠アプリ_はじめてガイド.pdf">PDF をダウンロード</a></nav>
 
   <header class="hero">
     <span class="eyebrow">DEMO GUIDE</span>
@@ -437,3 +448,5 @@
 
   <footer>勤怠・労務管理アプリ 試作版 ・ はじめてガイド</footer>
 </div>
+
+</body></html>
